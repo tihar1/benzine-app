@@ -29,7 +29,7 @@
             color: var(--text-main);
             margin: 0;
             padding: 20px;
-            padding-top: env(safe-area-inset-top, 40px); /* Ruimte voor iPhone notch */
+            padding-top: env(safe-area-inset-top, 40px);
             max-width: 480px;
             margin-left: auto;
             margin-right: auto;
@@ -95,10 +95,20 @@
             border: 1px solid #E5E5EA;
             background-color: #F9F9F9;
             border-radius: 10px;
-            font-size: 17px; /* 17px voorkomt inzoomen op iOS */
+            font-size: 17px;
             box-sizing: border-box;
             color: var(--text-main);
-            -webkit-appearance: none;
+            -webkit-appearance: none; /* Reset standard styles */
+            appearance: none;
+        }
+
+        /* Pijltje toevoegen aan selecties */
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007AFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px top 50%;
+            background-size: 10px auto;
+            padding-right: 30px;
         }
 
         input:focus, select:focus {
@@ -143,14 +153,6 @@
             border-radius: 8px;
         }
 
-        .btn-reset {
-            background-color: transparent;
-            color: var(--danger);
-            font-size: 15px;
-            padding: 10px;
-            margin-top: 5px;
-        }
-
         /* HISTORY LIST */
         .history-list {
             list-style: none;
@@ -182,9 +184,9 @@
     </header>
 
     <div class="card">
-        <div class="balance-label">Te ontvangen</div>
+        <div class="balance-label">Overmaken</div>
         <div class="balance-amount" id="bankDisplay">€ 0,00</div>
-        <button class="btn btn-reset" onclick="resetBank()">Reset (Geld ontvangen)</button>
+        <button class="btn btn-primary" onclick="resetBank()">Reset</button>
     </div>
 
     <div class="card">
@@ -203,11 +205,11 @@
         </div>
 
         <a href="#" class="btn btn-secondary" onclick="openMaps()">
-            <span style="margin-right: 6px;">🗺️</span> Open Maps
+            <span style="margin-right: 6px;">🗺️</span> Open Google Maps
         </a>
 
         <div class="form-group" style="margin-top:10px;">
-            <label>Afstand & Type</label>
+            <label>Afstand</label>
             <div style="display: flex; gap: 10px;">
                 <input type="number" id="kmInput" placeholder="Aantal km" inputmode="decimal" style="flex: 1;">
                 <select id="tripType" style="flex: 1;">
@@ -217,7 +219,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" onclick="addTrip()">Rit Toevoegen</button>
+        <button class="btn btn-primary" onclick="addTrip()">rit toevoegen</button>
     </div>
 
     <div class="card hidden" id="historyCard">
@@ -245,9 +247,9 @@
                 alert("Vul eerst een bestemming in.");
                 return;
             }
-            // Universele link werkt op iOS direct met de Maps app
-            const url = `http://maps.apple.com/?saddr=${encodeURIComponent(start)}&daddr=${encodeURIComponent(dest)}&dirflg=d`;
-            window.open(url, '_self');
+            // Universele Google Maps URL
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
+            window.open(url, '_blank');
         }
 
         function addTrip() {
@@ -291,53 +293,4 @@
             document.getElementById('destination').value = '';
             
             renderUI();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetBank() {
-            // Gebruik de native dialoog, maar check of gebruiker zeker is
-            if(confirm("Teller resetten naar €0,00?")) {
-                localStorage.setItem('benzinePot', 0);
-                localStorage.setItem('ritHistorie', JSON.stringify([]));
-                renderUI();
-            }
-        }
-
-        function renderUI() {
-            // 1. Totaalbedrag
-            const total = parseFloat(localStorage.getItem('benzinePot')) || 0;
-            document.getElementById('bankDisplay').innerText = formatCurrency(total);
-
-            // 2. Lijstje
-            const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
-            const listContainer = document.getElementById('historyList');
-            const cardContainer = document.getElementById('historyCard');
-
-            listContainer.innerHTML = '';
-
-            if (history.length === 0) {
-                cardContainer.classList.add('hidden');
-            } else {
-                cardContainer.classList.remove('hidden');
-                // Laat max 10 ritten zien om het scherm schoon te houden
-                history.slice(0, 10).forEach(trip => {
-                    const li = document.createElement('li');
-                    li.className = 'history-item';
-                    li.innerHTML = `
-                        <div>
-                            <div class="trip-desc">${trip.desc}</div>
-                            <div class="trip-date">${trip.date}</div>
-                        </div>
-                        <div class="trip-cost">+ ${formatCurrency(trip.cost)}</div>
-                    `;
-                    listContainer.appendChild(li);
-                });
-            }
-        }
-
-        function formatCurrency(num) {
-            return num.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' });
-        }
-    </script>
-</body>
-</html>
+            window.scrollTo({ top: 0, behavior: 'smooth'
