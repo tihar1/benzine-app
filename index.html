@@ -98,7 +98,7 @@
             font-size: 17px;
             box-sizing: border-box;
             color: var(--text-main);
-            -webkit-appearance: none; /* Reset standard styles */
+            -webkit-appearance: none;
             appearance: none;
         }
 
@@ -219,7 +219,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" onclick="addTrip()">rit toevoegen</button>
+        <button class="btn btn-primary" onclick="addTrip()">Rit toevoegen</button>
     </div>
 
     <div class="card hidden" id="historyCard">
@@ -247,7 +247,7 @@
                 alert("Vul eerst een bestemming in.");
                 return;
             }
-            // Universele Google Maps URL
+            // GECORRIGEERDE GOOGLE MAPS LINK:
             const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
             window.open(url, '_blank');
         }
@@ -293,4 +293,51 @@
             document.getElementById('destination').value = '';
             
             renderUI();
-            window.scrollTo({ top: 0, behavior: 'smooth'
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetBank() {
+            if(confirm("Teller resetten naar €0,00?")) {
+                localStorage.setItem('benzinePot', 0);
+                localStorage.setItem('ritHistorie', JSON.stringify([]));
+                renderUI();
+            }
+        }
+
+        function renderUI() {
+            // 1. Totaalbedrag
+            const total = parseFloat(localStorage.getItem('benzinePot')) || 0;
+            document.getElementById('bankDisplay').innerText = formatCurrency(total);
+
+            // 2. Lijstje
+            const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
+            const listContainer = document.getElementById('historyList');
+            const cardContainer = document.getElementById('historyCard');
+
+            listContainer.innerHTML = '';
+
+            if (history.length === 0) {
+                cardContainer.classList.add('hidden');
+            } else {
+                cardContainer.classList.remove('hidden');
+                history.slice(0, 10).forEach(trip => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <div>
+                            <div class="trip-desc">${trip.desc}</div>
+                            <div class="trip-date">${trip.date}</div>
+                        </div>
+                        <div class="trip-cost">+ ${formatCurrency(trip.cost)}</div>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            }
+        }
+
+        function formatCurrency(num) {
+            return num.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' });
+        }
+    </script>
+</body>
+</html>
