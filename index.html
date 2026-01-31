@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png?v=2">
+    <link rel="icon" href="icon.png?v=2">
 
     <style>
         :root {
@@ -249,7 +249,7 @@
             const startEnc = encodeURIComponent(start);
             const destEnc = encodeURIComponent(dest);
             
-            // GEBRUIK DEZE OFFICIËLE LINK & window.location.href (lost het witte scherm op)
+            // Link openen in huidig venster om wit scherm te voorkomen
             const url = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
             
             window.location.href = url;
