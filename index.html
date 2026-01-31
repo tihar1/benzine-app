@@ -9,15 +9,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' style='background-color:%230a2540'%3E%3Cpath d='M256 128c-70.7 0-128 57.3-128 128 0 70.7 57.3 128 128 128s128-57.3 128-128c0-70.7-57.3-128-128-128zm0 230c-56.3 0-102-45.7-102-102 0-56.3 45.7-102 102-102s102 45.7 102 102c0 56.3-45.7 102-102 102z' fill='%23fff'/%3E%3Cpath d='M256 256l60-60' stroke='%23fff' stroke-width='25' stroke-linecap='round'/%3E%3C/svg%3E">
-    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' style='background-color:%230a2540'%3E%3Cpath d='M256 128c-70.7 0-128 57.3-128 128 0 70.7 57.3 128 128 128s128-57.3 128-128c0-70.7-57.3-128-128-128zm0 230c-56.3 0-102-45.7-102-102 0-56.3 45.7-102 102-102s102 45.7 102 102c0 56.3-45.7 102-102 102z' fill='%23fff'/%3E%3Cpath d='M256 256l60-60' stroke='%23fff' stroke-width='25' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" href="icon.png">
 
     <style>
         :root {
             --bg-color: #F2F2F7;
             --card-bg: #FFFFFF;
             --primary: #007AFF;
-            --primary-gradient: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            --primary-gradient: linear-gradient(135deg, #007AFF 0%, #0A84FF 100%);
             --text-main: #1C1C1E;
             --text-secondary: #8E8E93;
             --danger: #FF3B30;
@@ -247,8 +247,11 @@
                 alert("Vul eerst een bestemming in.");
                 return;
             }
-            // GECORRIGEERDE GOOGLE MAPS LINK:
-            const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
+            // GEFORCEERDE GOOGLE MAPS LINK:
+            // Gebruik https://www.google.com/maps/dir/... structuur, dit forceert de app beter op iOS
+            const startEnc = encodeURIComponent(start);
+            const destEnc = encodeURIComponent(dest);
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
             window.open(url, '_blank');
         }
 
