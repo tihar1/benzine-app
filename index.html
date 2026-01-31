@@ -16,7 +16,6 @@
         :root {
             --bg-color: #F2F2F7;
             --card-bg: #FFFFFF;
-            /* JOUW KLEUR: #bc3a41 */
             --primary: #bc3a41; 
             --text-main: #1C1C1E;
             --text-secondary: #8E8E93;
@@ -35,21 +34,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* HEADER */
-        header {
-            margin-bottom: 20px;
-            padding: 0 10px;
-        }
-        
-        h1 {
-            font-size: 34px;
-            font-weight: 700;
-            margin: 0;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
+        header { margin-bottom: 20px; padding: 0 10px; }
+        h1 { font-size: 34px; font-weight: 700; margin: 0; color: var(--text-main); letter-spacing: -0.5px; }
 
-        /* CARDS */
         .card {
             background: var(--card-bg);
             border-radius: 14px;
@@ -58,129 +45,44 @@
             margin-bottom: 20px;
         }
 
-        /* BALANCE DISPLAY */
-        .balance-label {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
+        .balance-label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); font-weight: 600; }
+        .balance-amount { font-size: 42px; font-weight: 700; color: var(--text-main); margin: 5px 0 15px 0; letter-spacing: -1px; }
 
-        .balance-amount {
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin: 5px 0 15px 0;
-            letter-spacing: -1px;
-        }
-
-        /* FORM ELEMENTS */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; font-size: 15px; font-weight: 600; color: var(--text-main); }
 
         input, select {
-            width: 100%;
-            padding: 14px 12px;
-            border: 1px solid #E5E5EA;
-            background-color: #F9F9F9;
-            border-radius: 10px;
-            font-size: 17px;
-            box-sizing: border-box;
-            color: var(--text-main);
-            -webkit-appearance: none;
-            appearance: none;
+            width: 100%; padding: 14px 12px; border: 1px solid #E5E5EA; background-color: #F9F9F9;
+            border-radius: 10px; font-size: 17px; box-sizing: border-box; color: var(--text-main);
+            -webkit-appearance: none; appearance: none;
         }
 
-        /* Rood pijltje voor selecties */
         select {
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23bc3a41%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px top 50%;
-            background-size: 10px auto;
-            padding-right: 30px;
+            background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 10px auto; padding-right: 30px;
         }
+        input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background-color: #fff;
-        }
-
-        /* BUTTONS */
         .btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: opacity 0.2s;
+            display: block; width: 100%; padding: 16px; border: none; border-radius: 12px;
+            font-size: 17px; font-weight: 600; cursor: pointer; text-align: center;
+            text-decoration: none; transition: opacity 0.2s;
         }
-        
         .btn:active { opacity: 0.7; }
+        .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 4px 12px rgba(188, 58, 65, 0.3); }
+        .btn-secondary { background-color: rgba(188, 58, 65, 0.08); color: var(--primary); font-size: 15px; padding: 12px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; width: auto; border-radius: 8px; }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(188, 58, 65, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: rgba(188, 58, 65, 0.08);
-            color: var(--primary);
-            font-size: 15px;
-            padding: 12px;
-            margin-bottom: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: auto;
-            border-radius: 8px;
-        }
-
-        /* HISTORY LIST */
-        .history-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid #E5E5EA;
-        }
-        
+        .history-list { list-style: none; padding: 0; margin: 0; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #E5E5EA; }
         .history-item:last-child { border-bottom: none; }
-
         .trip-desc { font-weight: 500; font-size: 16px; }
         .trip-date { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
         .trip-cost { font-weight: 600; font-size: 16px; color: var(--text-main); }
-
         .hidden { display: none; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>Benzine</h1>
-    </header>
+    <header><h1>Benzine</h1></header>
 
     <div class="card">
         <div class="balance-label">Overmaken</div>
@@ -191,146 +93,80 @@
     <div class="card">
         <div class="form-group">
             <label>Bestuurder</label>
-            <select id="driver">
-                <option value="solo">Ik rijd alleen</option>
-                <option value="samen">Samen met de liefste</option>
-            </select>
+            <select id="driver"><option value="solo">Ik rijd alleen</option><option value="samen">Samen met de liefste</option></select>
         </div>
-
         <div class="form-group">
             <label>Route</label>
             <input type="text" id="start" value="Francklaan 4, Nijkerk" style="margin-bottom: 10px;">
             <input type="text" id="destination" placeholder="Bestemming (stad of adres)">
         </div>
-
         <a href="#" class="btn btn-secondary" onclick="openMaps()">Open Google Maps</a>
-
         <div class="form-group" style="margin-top:10px;">
             <label>Afstand</label>
             <div style="display: flex; gap: 10px;">
                 <input type="number" id="kmInput" placeholder="Aantal km" inputmode="decimal" style="flex: 1;">
-                <select id="tripType" style="flex: 1;">
-                    <option value="1">Enkele reis</option>
-                    <option value="2">Retour</option>
-                </select>
+                <select id="tripType" style="flex: 1;"><option value="1">Enkele reis</option><option value="2">Retour</option></select>
             </div>
         </div>
-
         <button class="btn btn-primary" onclick="addTrip()">Rit toevoegen</button>
     </div>
 
     <div class="card hidden" id="historyCard">
         <div class="balance-label" style="margin-bottom: 10px;">Recente ritten</div>
-        <ul id="historyList" class="history-list">
-            </ul>
+        <ul id="historyList" class="history-list"></ul>
     </div>
 
     <script>
-        // --- CONFIGURATIE ---
         const PRICE_PER_KM = 75 / 650; 
-
-        // --- INIT ---
-        window.onload = function() {
-            renderUI();
-        }
-
-        // --- FUNCTIES ---
+        window.onload = function() { renderUI(); }
         function openMaps() {
             const start = document.getElementById('start').value;
             const dest = document.getElementById('destination').value;
-            
-            if(!dest) {
-                alert("Vul eerst een bestemming in.");
-                return;
-            }
-            
+            if(!dest) { alert("Vul eerst een bestemming in."); return; }
             const startEnc = encodeURIComponent(start);
             const destEnc = encodeURIComponent(dest);
-            const url = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
-            
-            window.location.href = url;
+            window.location.href = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
         }
-
         function addTrip() {
             const kmInput = document.getElementById('kmInput').value.replace(',', '.');
             const km = parseFloat(kmInput);
             const multiplier = parseInt(document.getElementById('tripType').value);
             const driver = document.getElementById('driver').value;
             const destName = document.getElementById('destination').value || "Onbekende rit";
-
-            if (!km || km <= 0) {
-                alert("Vul een geldig aantal kilometers in.");
-                return;
-            }
-
+            if (!km || km <= 0) { alert("Vul een geldig aantal kilometers in."); return; }
             let cost = km * multiplier * PRICE_PER_KM;
             let label = destName;
-
-            if (driver === 'samen') {
-                cost = cost / 2;
-                label += " (Samen)";
-            }
-
+            if (driver === 'samen') { cost = cost / 2; label += " (Samen)"; }
             let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
             localStorage.setItem('benzinePot', (currentTotal + cost).toFixed(2));
-
             let history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
-            const newTrip = {
-                desc: label,
-                cost: cost,
-                date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }),
-                ts: Date.now()
-            };
-            history.unshift(newTrip);
+            history.unshift({ desc: label, cost: cost, date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }), ts: Date.now() });
             localStorage.setItem('ritHistorie', JSON.stringify(history));
-
-            document.getElementById('kmInput').value = '';
-            document.getElementById('destination').value = '';
-            
-            renderUI();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('kmInput').value = ''; document.getElementById('destination').value = '';
+            renderUI(); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         function resetBank() {
             if(confirm("Teller resetten naar €0,00?")) {
-                localStorage.setItem('benzinePot', 0);
-                localStorage.setItem('ritHistorie', JSON.stringify([]));
-                renderUI();
+                localStorage.setItem('benzinePot', 0); localStorage.setItem('ritHistorie', JSON.stringify([])); renderUI();
             }
         }
-
         function renderUI() {
             const total = parseFloat(localStorage.getItem('benzinePot')) || 0;
             document.getElementById('bankDisplay').innerText = formatCurrency(total);
-
             const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
             const listContainer = document.getElementById('historyList');
             const cardContainer = document.getElementById('historyCard');
-
             listContainer.innerHTML = '';
-
-            if (history.length === 0) {
-                cardContainer.classList.add('hidden');
-            } else {
+            if (history.length === 0) { cardContainer.classList.add('hidden'); } else {
                 cardContainer.classList.remove('hidden');
                 history.slice(0, 10).forEach(trip => {
-                    const li = document.createElement('li');
-                    li.className = 'history-item';
-                    li.innerHTML = `
-                        <div>
-                            <div class="trip-desc">${trip.desc}</div>
-                            <div class="trip-date">${trip.date}</div>
-                        </div>
-                        <div class="trip-cost">+ ${formatCurrency(trip.cost)}</div>
-                    `;
+                    const li = document.createElement('li'); li.className = 'history-item';
+                    li.innerHTML = `<div><div class="trip-desc">${trip.desc}</div><div class="trip-date">${trip.date}</div></div><div class="trip-cost">+ ${formatCurrency(trip.cost)}</div>`;
                     listContainer.appendChild(li);
                 });
             }
         }
-
-        function formatCurrency(num) {
-            return num.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' });
-        }
+        function formatCurrency(num) { return num.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' }); }
     </script>
 </body>
 </html>
