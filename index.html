@@ -3,26 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <title>Benzine Tracker</title>
+    <meta name="apple-mobile-web-app-title" content="Auto Kosten">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%232a9d8f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='300'%3E🚗%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%232a9d8f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='300'%3E🚗%3C/text%3E%3C/svg%3E">
+
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f6; /* Heel licht grijs-groen */
+            background-color: #f4f7f6;
             color: #333;
             padding: 20px;
-            max-width: 500px; /* Iets smaller voor mooiere mobiele look */
+            /* Zorgt voor ruimte bovenaan zodat de notch van de iPhone niet over de tekst valt */
+            padding-top: env(safe-area-inset-top, 20px); 
+            max-width: 500px;
             margin: 0 auto;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* De 'stevige' kop */
         h2 { 
             text-align: center; 
-            color: #264653; /* Donker petrol/groen */
+            color: #264653; 
             font-weight: 800;
             text-transform: lowercase;
             font-size: 2em;
             letter-spacing: -1px;
             margin-bottom: 25px;
+            margin-top: 10px;
         }
         
         .card {
@@ -44,20 +55,22 @@
 
         input, select {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 2px solid #ecf0f1;
             background-color: #fafafa;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             margin-bottom: 20px;
             box-sizing: border-box;
             color: #2c3e50;
             transition: border-color 0.3s;
+            -webkit-appearance: none; /* Verwijdert standaard iOS styling */
         }
         
         input:focus, select:focus {
             outline: none;
             border-color: #2a9d8f;
+            background-color: #fff;
         }
 
         .btn {
@@ -76,25 +89,23 @@
 
         .btn:active { transform: scale(0.98); }
 
-        /* De frisse actiekleur (Zeegroen) */
         .btn-action { 
             background-color: #2a9d8f; 
             color: white; 
+            box-shadow: 0 4px 6px rgba(42, 157, 143, 0.2);
         }
 
-        /* Maps knop - compacter */
         .btn-maps {
             background-color: white;
             color: #2a9d8f;
             border: 2px solid #2a9d8f;
-            display: inline-block; /* Niet meer volle breedte */
+            display: inline-block;
             width: auto;
             padding: 10px 20px;
             font-size: 14px;
             margin-bottom: 20px;
         }
 
-        /* Reset knop - rustig oranje */
         .btn-reset { 
             background-color: #e9c46a; 
             color: #264653; 
@@ -105,191 +116,4 @@
             font-size: 2.8em;
             font-weight: 800;
             text-align: center;
-            color: #264653;
-            margin: 10px 0;
-            font-feature-settings: "tnum";
-            letter-spacing: -1px;
-        }
-
-        /* Stijl voor het lijstje */
-        .history-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border-top: 1px solid #ecf0f1;
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #ecf0f1;
-            font-size: 0.9em;
-        }
-        .history-meta { color: #95a5a6; font-size: 0.85em; }
-        .history-amount { font-weight: bold; color: #2a9d8f; }
-
-        h3 { 
-            color: #264653; 
-            margin-top: 0; 
-            text-transform: lowercase;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-
-    <h2>kilometerteller</h2>
-
-    <div class="card">
-        <label>te ontvangen</label>
-        <div class="total-display" id="bankDisplay">€ 0,00</div>
-        <button class="btn btn-reset" onclick="resetBank()">geld overgemaakt (reset)</button>
-    </div>
-
-    <div class="card">
-        <h3>nieuwe rit</h3>
-        
-        <label>wie rijdt er?</label>
-        <select id="driver">
-            <option value="solo">ik rijd alleen</option>
-            <option value="samen">samen met de liefste</option>
-        </select>
-
-        <label>vertrekadres</label>
-        <input type="text" id="start" value="Francklaan 4, Nijkerk">
-
-        <label>bestemming</label>
-        <input type="text" id="destination" placeholder="bijv. amsterdam">
-
-        <a href="#" id="mapsLink" target="_blank" class="btn btn-maps" onclick="updateMapsLink()">📍 route in maps</a>
-        <br>
-
-        <label>aantal kilometers (enkele reis)</label>
-        <input type="number" id="kmInput" placeholder="0" inputmode="decimal">
-
-        <label>type reis</label>
-        <select id="tripType">
-            <option value="1">enkele reis</option>
-            <option value="2">retour (heen & terug)</option>
-        </select>
-
-        <button class="btn btn-action" onclick="calculateAndAdd()">bereken & toevoegen</button>
-    </div>
-
-    <div class="card" id="historyCard" style="display:none;">
-        <h3>laatste ritten</h3>
-        <ul id="historyList" class="history-list">
-            </ul>
-    </div>
-
-    <script>
-        // CONFIGURATIE
-        const PRICE_PER_KM = 70 / 650; 
-
-        window.onload = function() {
-            updateUI();
-        }
-
-        function updateMapsLink() {
-            const start = document.getElementById('start').value;
-            const dest = document.getElementById('destination').value;
-            
-            if(!dest) {
-                alert("vul eerst een bestemming in");
-                return false;
-            }
-            const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(dest)}`;
-            window.open(url, '_blank');
-        }
-
-        function calculateAndAdd() {
-            const km = parseFloat(document.getElementById('kmInput').value);
-            const multiplier = parseInt(document.getElementById('tripType').value);
-            const driver = document.getElementById('driver').value;
-            const destName = document.getElementById('destination').value || "onbekend";
-            
-            if (!km || km <= 0) {
-                alert("vul een geldig aantal kilometers in");
-                return;
-            }
-
-            // Basisberekening
-            let tripCost = km * multiplier * PRICE_PER_KM;
-            let description = destName;
-
-            // Halveren als we samen rijden
-            if (driver === 'samen') {
-                tripCost = tripCost / 2;
-                description += " (samen)";
-            }
-
-            // 1. Update Totaal
-            let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
-            let newTotal = currentTotal + tripCost;
-            localStorage.setItem('benzinePot', newTotal.toFixed(2));
-
-            // 2. Update Historie Lijstje
-            let history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
-            
-            // Voeg nieuwe rit toe vooraan de lijst
-            const newTrip = {
-                desc: description,
-                cost: tripCost,
-                date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' })
-            };
-            history.unshift(newTrip); // Nieuwste bovenaan
-            localStorage.setItem('ritHistorie', JSON.stringify(history));
-
-            // UI verversen
-            updateUI();
-            
-            // Velden opschonen
-            document.getElementById('kmInput').value = '';
-            document.getElementById('destination').value = '';
-        }
-
-        function resetBank() {
-            if(confirm("weet je zeker dat het geld is overgemaakt? de teller en de geschiedenis worden gewist.")) {
-                localStorage.setItem('benzinePot', 0);
-                localStorage.setItem('ritHistorie', JSON.stringify([])); // Wis ook historie
-                updateUI();
-            }
-        }
-
-        function updateUI() {
-            // Update bedrag
-            const amount = parseFloat(localStorage.getItem('benzinePot')) || 0;
-            document.getElementById('bankDisplay').innerText = formatEuro(amount);
-
-            // Update lijstje
-            const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
-            const listEl = document.getElementById('historyList');
-            const listCard = document.getElementById('historyCard');
-
-            listEl.innerHTML = ''; // Maak leeg
-
-            if (history.length > 0) {
-                listCard.style.display = 'block';
-                history.forEach(trip => {
-                    const li = document.createElement('li');
-                    li.className = 'history-item';
-                    li.innerHTML = `
-                        <div>
-                            <div>${trip.desc}</div>
-                            <div class="history-meta">${trip.date}</div>
-                        </div>
-                        <div class="history-amount">+ ${formatEuro(trip.cost)}</div>
-                    `;
-                    listEl.appendChild(li);
-                });
-            } else {
-                listCard.style.display = 'none';
-            }
-        }
-
-        function formatEuro(amount) {
-            return '€ ' + amount.toFixed(2).replace('.', ',');
-        }
-    </script>
-</body>
-</html>
+            color: #264
