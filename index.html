@@ -16,11 +16,10 @@
         :root {
             --bg-color: #F2F2F7;
             --card-bg: #FFFFFF;
-            --primary: #007AFF;
-            --primary-gradient: linear-gradient(135deg, #007AFF 0%, #0A84FF 100%);
+            /* JOUW NIEUWE KLEUR: #bc3a41 */
+            --primary: #bc3a41; 
             --text-main: #1C1C1E;
             --text-secondary: #8E8E93;
-            --danger: #FF3B30;
         }
 
         body {
@@ -102,9 +101,9 @@
             appearance: none;
         }
 
-        /* Pijltje toevoegen aan selecties */
+        /* Rood pijltje voor selecties */
         select {
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007AFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23bc3a41%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
             background-position: right 12px top 50%;
             background-size: 10px auto;
@@ -135,13 +134,14 @@
         .btn:active { opacity: 0.7; }
 
         .btn-primary {
-            background: var(--primary-gradient);
+            background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px rgba(88, 86, 214, 0.3);
+            box-shadow: 0 4px 12px rgba(188, 58, 65, 0.3); /* Schaduw in dezelfde rode tint */
         }
 
         .btn-secondary {
-            background-color: rgba(0, 122, 255, 0.1);
+            /* Zeer lichte versie van je rode kleur voor de achtergrond */
+            background-color: rgba(188, 58, 65, 0.08);
             color: var(--primary);
             font-size: 15px;
             padding: 12px;
@@ -204,9 +204,7 @@
             <input type="text" id="destination" placeholder="Bestemming (stad of adres)">
         </div>
 
-        <a href="#" class="btn btn-secondary" onclick="openMaps()">
-            <span style="margin-right: 6px;">🗺️</span> Open Google Maps
-        </a>
+        <a href="#" class="btn btn-secondary" onclick="openMaps()">Open Google Maps</a>
 
         <div class="form-group" style="margin-top:10px;">
             <label>Afstand</label>
@@ -247,11 +245,14 @@
                 alert("Vul eerst een bestemming in.");
                 return;
             }
-            // GEFORCEERDE GOOGLE MAPS LINK:
-            // Gebruik https://www.google.com/maps/dir/... structuur, dit forceert de app beter op iOS
+            
+            // Link constructie
             const startEnc = encodeURIComponent(start);
             const destEnc = encodeURIComponent(dest);
+            
+            // Deze link probeert de Google Maps app te openen, of valt terug op de browser
             const url = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
+            
             window.open(url, '_blank');
         }
 
