@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Benzine Tracker</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            color: #1c1c1e;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h2 { text-align: center; color: #007aff; }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #8e8e93;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d1d6;
+            border-radius: 8px;
+            font-size: 16px; /* Voorkomt inzoomen op iPhone */
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-maps { background-color: #34c759; color: white; text-decoration: none; }
+        .btn-calc { background-color: #007aff; color: white; }
+        .btn-reset { background-color: #ff3b30; color: white; margin-top: 20px;}
+
+        .result-box {
+            text-align: center;
+            padding: 15px;
+            background-color: #f2f2f7;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .total-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            color: #1c1c1e;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🚗 Kilometerteller</h2>
+
+    <div class="card">
+        <label>Te ontvangen bedrag:</label>
+        <div class="total-display" id="bankDisplay">€ 0,00</div>
+        <button class="btn btn-reset" onclick="resetBank()">💰 Geld ontvangen (Reset)</button>
+    </div>
+
+    <div class="card">
+        <h3>Nieuwe Rit</h3>
+        
+        <label>Wie rijdt er?</label>
+        <select id="driver">
+            <option value="solo">Ik rijd alleen</option>
+            <option value="samen">Samen met vrouw</option>
+        </select>
+
+        <label>Vertrekadres</label>
+        <input type="text" id="start" value="Francklaan 4, Nijkerk">
+
+        <label>Bestemming</label>
+        <input type="text" id="destination" placeholder="Bijv. Amsterdam">
+
+        <a href="#" id="mapsLink" target="_blank" class="btn btn-maps" onclick="updateMapsLink()">📍 1. Bekijk Route in Maps</a>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+        <label>Aantal Kilometers (enkele reis)</label>
+        <input type="number" id="kmInput" placeholder="0">
+
+        <label>Type Reis</label>
+        <select id="tripType">
+            <option value="1">Enkele reis</option>
+            <option value="2">Retour (heen & terug)</option>
+        </select>
+
+        <button class="btn btn-calc" onclick="calculateAndAdd()">➕ 2. Bereken & Toevoegen</button>
+        
+        <div id="lastTripInfo" class="result-box" style="display:none;">
+            Laatste rit toegevoegd: <b id="lastTripCost">€0,00</b>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATIE
+        // 70 euro / 650 km = prijs per km
+        const PRICE_PER_KM = 70 / 650; 
+
+        // Bij het laden van de pagina, haal de oude stand op
+        window.onload = function() {
+            updateBankDisplay();
+        }
+
+        function updateMapsLink() {
+            const start = document.getElementById('start').value;
+            const dest = document.getElementById('destination').value;
+            
+            if(!dest) {
+                alert("Vul eerst een bestemming in!");
+                return false;
+            }
+
+            // Maak een Google Maps link
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(dest)}`;
+            
+            // Open de link
+            window.open(url, '_blank');
+        }
+
+        function calculateAndAdd() {
+            const km = parseFloat(document.getElementById('kmInput').value);
+            const multiplier = parseInt(document.getElementById('tripType').value);
+            
+            if (!km || km <= 0) {
+                alert("Vul een geldig aantal kilometers in.");
+                return;
+            }
+
+            // Berekening: km * retour_factor * prijs_per_km
+            const tripCost = km * multiplier * PRICE_PER_KM;
+
+            // Haal huidig totaal op uit geheugen
+            let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
+            
+            // Tel op
+            let newTotal = currentTotal + tripCost;
+            
+            // Sla op in geheugen
+            localStorage.setItem('benzinePot', newTotal.toFixed(2));
+
+            // Update het scherm
+            updateBankDisplay();
+            
+            // Toon wat we net hebben toegevoegd
+            document.getElementById('lastTripInfo').style.display = 'block';
+            document.getElementById('lastTripCost').innerText = formatEuro(tripCost);
+
+            // Velden leegmaken voor volgende keer (behalve startadres)
+            document.getElementById('kmInput').value = '';
+            document.getElementById('destination').value = '';
+        }
+
+        function resetBank() {
+            if(confirm("Weet je zeker dat het geld is overgemaakt? De teller gaat terug naar €0.")) {
+                localStorage.setItem('benzinePot', 0);
+                updateBankDisplay();
+                document.getElementById('lastTripInfo').style.display = 'none';
+            }
+        }
+
+        function updateBankDisplay() {
+            const amount = parseFloat(localStorage.getItem('benzinePot')) || 0;
+            document.getElementById('bankDisplay').innerText = formatEuro(amount);
+        }
+
+        function formatEuro(amount) {
+            return '€ ' + amount.toFixed(2).replace('.', ',');
+        }
+    </script>
+</body>
+</html>
