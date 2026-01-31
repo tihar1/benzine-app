@@ -16,7 +16,7 @@
         :root {
             --bg-color: #F2F2F7;
             --card-bg: #FFFFFF;
-            /* JOUW NIEUWE KLEUR: #bc3a41 */
+            /* JOUW KLEUR: #bc3a41 */
             --primary: #bc3a41; 
             --text-main: #1C1C1E;
             --text-secondary: #8E8E93;
@@ -136,11 +136,10 @@
         .btn-primary {
             background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px rgba(188, 58, 65, 0.3); /* Schaduw in dezelfde rode tint */
+            box-shadow: 0 4px 12px rgba(188, 58, 65, 0.3);
         }
 
         .btn-secondary {
-            /* Zeer lichte versie van je rode kleur voor de achtergrond */
             background-color: rgba(188, 58, 65, 0.08);
             color: var(--primary);
             font-size: 15px;
@@ -193,155 +192,4 @@
         <div class="form-group">
             <label>Bestuurder</label>
             <select id="driver">
-                <option value="solo">Ik rijd alleen</option>
-                <option value="samen">Samen met de liefste</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Route</label>
-            <input type="text" id="start" value="Francklaan 4, Nijkerk" style="margin-bottom: 10px;">
-            <input type="text" id="destination" placeholder="Bestemming (stad of adres)">
-        </div>
-
-        <a href="#" class="btn btn-secondary" onclick="openMaps()">Open Google Maps</a>
-
-        <div class="form-group" style="margin-top:10px;">
-            <label>Afstand</label>
-            <div style="display: flex; gap: 10px;">
-                <input type="number" id="kmInput" placeholder="Aantal km" inputmode="decimal" style="flex: 1;">
-                <select id="tripType" style="flex: 1;">
-                    <option value="1">Enkele reis</option>
-                    <option value="2">Retour</option>
-                </select>
-            </div>
-        </div>
-
-        <button class="btn btn-primary" onclick="addTrip()">Rit toevoegen</button>
-    </div>
-
-    <div class="card hidden" id="historyCard">
-        <div class="balance-label" style="margin-bottom: 10px;">Recente ritten</div>
-        <ul id="historyList" class="history-list">
-            </ul>
-    </div>
-
-    <script>
-        // --- CONFIGURATIE ---
-        // 75 euro per tank / 650 km
-        const PRICE_PER_KM = 75 / 650; 
-
-        // --- INIT ---
-        window.onload = function() {
-            renderUI();
-        }
-
-        // --- FUNCTIES ---
-        function openMaps() {
-            const start = document.getElementById('start').value;
-            const dest = document.getElementById('destination').value;
-            
-            if(!dest) {
-                alert("Vul eerst een bestemming in.");
-                return;
-            }
-            
-            // Link constructie
-            const startEnc = encodeURIComponent(start);
-            const destEnc = encodeURIComponent(dest);
-            
-            // Deze link probeert de Google Maps app te openen, of valt terug op de browser
-            const url = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
-            
-            window.open(url, '_blank');
-        }
-
-        function addTrip() {
-            const kmInput = document.getElementById('kmInput').value.replace(',', '.');
-            const km = parseFloat(kmInput);
-            const multiplier = parseInt(document.getElementById('tripType').value);
-            const driver = document.getElementById('driver').value;
-            const destName = document.getElementById('destination').value || "Onbekende rit";
-
-            if (!km || km <= 0) {
-                alert("Vul een geldig aantal kilometers in.");
-                return;
-            }
-
-            // Berekening
-            let cost = km * multiplier * PRICE_PER_KM;
-            let label = destName;
-
-            if (driver === 'samen') {
-                cost = cost / 2;
-                label += " (Samen)";
-            }
-
-            // Opslaan Totaal
-            let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
-            localStorage.setItem('benzinePot', (currentTotal + cost).toFixed(2));
-
-            // Opslaan Historie
-            let history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
-            const newTrip = {
-                desc: label,
-                cost: cost,
-                date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }),
-                ts: Date.now()
-            };
-            history.unshift(newTrip);
-            localStorage.setItem('ritHistorie', JSON.stringify(history));
-
-            // UI Resetten
-            document.getElementById('kmInput').value = '';
-            document.getElementById('destination').value = '';
-            
-            renderUI();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetBank() {
-            if(confirm("Teller resetten naar €0,00?")) {
-                localStorage.setItem('benzinePot', 0);
-                localStorage.setItem('ritHistorie', JSON.stringify([]));
-                renderUI();
-            }
-        }
-
-        function renderUI() {
-            // 1. Totaalbedrag
-            const total = parseFloat(localStorage.getItem('benzinePot')) || 0;
-            document.getElementById('bankDisplay').innerText = formatCurrency(total);
-
-            // 2. Lijstje
-            const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
-            const listContainer = document.getElementById('historyList');
-            const cardContainer = document.getElementById('historyCard');
-
-            listContainer.innerHTML = '';
-
-            if (history.length === 0) {
-                cardContainer.classList.add('hidden');
-            } else {
-                cardContainer.classList.remove('hidden');
-                history.slice(0, 10).forEach(trip => {
-                    const li = document.createElement('li');
-                    li.className = 'history-item';
-                    li.innerHTML = `
-                        <div>
-                            <div class="trip-desc">${trip.desc}</div>
-                            <div class="trip-date">${trip.date}</div>
-                        </div>
-                        <div class="trip-cost">+ ${formatCurrency(trip.cost)}</div>
-                    `;
-                    listContainer.appendChild(li);
-                });
-            }
-        }
-
-        function formatCurrency(num) {
-            return num.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' });
-        }
-    </script>
-</body>
-</html>
+                <option value="
