@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="apple-touch-icon" href="icon.png?v=2">
-    <link rel="icon" href="icon.png?v=2">
+    <link rel="apple-touch-icon" href="auto.png">
+    <link rel="icon" href="auto.png">
 
     <style>
         :root {
@@ -227,7 +227,6 @@
 
     <script>
         // --- CONFIGURATIE ---
-        // 75 euro per tank / 650 km
         const PRICE_PER_KM = 75 / 650; 
 
         // --- INIT ---
@@ -245,11 +244,8 @@
                 return;
             }
             
-            // Link constructie
             const startEnc = encodeURIComponent(start);
             const destEnc = encodeURIComponent(dest);
-            
-            // Link openen in huidig venster om wit scherm te voorkomen
             const url = `https://www.google.com/maps/dir/?api=1&origin=${startEnc}&destination=${destEnc}&travelmode=driving`;
             
             window.location.href = url;
@@ -267,7 +263,6 @@
                 return;
             }
 
-            // Berekening
             let cost = km * multiplier * PRICE_PER_KM;
             let label = destName;
 
@@ -276,11 +271,9 @@
                 label += " (Samen)";
             }
 
-            // Opslaan Totaal
             let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
             localStorage.setItem('benzinePot', (currentTotal + cost).toFixed(2));
 
-            // Opslaan Historie
             let history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
             const newTrip = {
                 desc: label,
@@ -291,7 +284,6 @@
             history.unshift(newTrip);
             localStorage.setItem('ritHistorie', JSON.stringify(history));
 
-            // UI Resetten
             document.getElementById('kmInput').value = '';
             document.getElementById('destination').value = '';
             
@@ -308,11 +300,9 @@
         }
 
         function renderUI() {
-            // 1. Totaalbedrag
             const total = parseFloat(localStorage.getItem('benzinePot')) || 0;
             document.getElementById('bankDisplay').innerText = formatCurrency(total);
 
-            // 2. Lijstje
             const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
             const listContainer = document.getElementById('historyList');
             const cardContainer = document.getElementById('historyCard');
