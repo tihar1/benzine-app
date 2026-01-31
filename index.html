@@ -2,118 +2,342 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <title>Benzine Tracker</title>
-    <meta name="apple-mobile-web-app-title" content="Auto Kosten">
+    <title>Benzine</title>
+    <meta name="apple-mobile-web-app-title" content="Benzine">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%232a9d8f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='300'%3E🚗%3C/text%3E%3C/svg%3E">
-    <link rel="icon" type="image/png" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%232a9d8f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='300'%3E🚗%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' style='background-color:%230a2540'%3E%3Cpath d='M256 128c-70.7 0-128 57.3-128 128 0 70.7 57.3 128 128 128s128-57.3 128-128c0-70.7-57.3-128-128-128zm0 230c-56.3 0-102-45.7-102-102 0-56.3 45.7-102 102-102s102 45.7 102 102c0 56.3-45.7 102-102 102z' fill='%23fff'/%3E%3Cpath d='M256 256l60-60' stroke='%23fff' stroke-width='25' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' style='background-color:%230a2540'%3E%3Cpath d='M256 128c-70.7 0-128 57.3-128 128 0 70.7 57.3 128 128 128s128-57.3 128-128c0-70.7-57.3-128-128-128zm0 230c-56.3 0-102-45.7-102-102 0-56.3 45.7-102 102-102s102 45.7 102 102c0 56.3-45.7 102-102 102z' fill='%23fff'/%3E%3Cpath d='M256 256l60-60' stroke='%23fff' stroke-width='25' stroke-linecap='round'/%3E%3C/svg%3E">
 
     <style>
+        :root {
+            --bg-color: #F2F2F7;
+            --card-bg: #FFFFFF;
+            --primary: #007AFF;
+            --primary-gradient: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            --text-main: #1C1C1E;
+            --text-secondary: #8E8E93;
+            --danger: #FF3B30;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
             padding: 20px;
-            /* Zorgt voor ruimte bovenaan zodat de notch van de iPhone niet over de tekst valt */
-            padding-top: env(safe-area-inset-top, 20px); 
-            max-width: 500px;
-            margin: 0 auto;
+            padding-top: env(safe-area-inset-top, 40px); /* Ruimte voor iPhone notch */
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
             -webkit-tap-highlight-color: transparent;
         }
 
-        h2 { 
-            text-align: center; 
-            color: #264653; 
-            font-weight: 800;
-            text-transform: lowercase;
-            font-size: 2em;
-            letter-spacing: -1px;
-            margin-bottom: 25px;
-            margin-top: 10px;
+        /* HEADER */
+        header {
+            margin-bottom: 20px;
+            padding: 0 10px;
         }
         
+        h1 {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        /* CARDS */
         .card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
             margin-bottom: 20px;
+        }
+
+        /* BALANCE DISPLAY */
+        .balance-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 5px 0 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: 15px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            font-size: 0.9em;
-            color: #7f8c8d;
-            text-transform: lowercase;
+            margin-bottom: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
         }
 
         input, select {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #ecf0f1;
-            background-color: #fafafa;
-            border-radius: 12px;
-            font-size: 16px;
-            margin-bottom: 20px;
+            padding: 14px 12px;
+            border: 1px solid #E5E5EA;
+            background-color: #F9F9F9;
+            border-radius: 10px;
+            font-size: 17px; /* 17px voorkomt inzoomen op iOS */
             box-sizing: border-box;
-            color: #2c3e50;
-            transition: border-color 0.3s;
-            -webkit-appearance: none; /* Verwijdert standaard iOS styling */
+            color: var(--text-main);
+            -webkit-appearance: none;
         }
-        
+
         input:focus, select:focus {
             outline: none;
-            border-color: #2a9d8f;
+            border-color: var(--primary);
             background-color: #fff;
         }
 
+        /* BUTTONS */
         .btn {
             display: block;
             width: 100%;
             padding: 16px;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            transition: transform 0.1s, opacity 0.2s;
             text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        
+        .btn:active { opacity: 0.7; }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(88, 86, 214, 0.3);
         }
 
-        .btn:active { transform: scale(0.98); }
-
-        .btn-action { 
-            background-color: #2a9d8f; 
-            color: white; 
-            box-shadow: 0 4px 6px rgba(42, 157, 143, 0.2);
-        }
-
-        .btn-maps {
-            background-color: white;
-            color: #2a9d8f;
-            border: 2px solid #2a9d8f;
-            display: inline-block;
-            width: auto;
-            padding: 10px 20px;
-            font-size: 14px;
+        .btn-secondary {
+            background-color: rgba(0, 122, 255, 0.1);
+            color: var(--primary);
+            font-size: 15px;
+            padding: 12px;
             margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            border-radius: 8px;
         }
 
-        .btn-reset { 
-            background-color: #e9c46a; 
-            color: #264653; 
-            margin-top: 10px;
+        .btn-reset {
+            background-color: transparent;
+            color: var(--danger);
+            font-size: 15px;
+            padding: 10px;
+            margin-top: 5px;
         }
 
-        .total-display {
-            font-size: 2.8em;
-            font-weight: 800;
-            text-align: center;
-            color: #264
+        /* HISTORY LIST */
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #E5E5EA;
+        }
+        
+        .history-item:last-child { border-bottom: none; }
+
+        .trip-desc { font-weight: 500; font-size: 16px; }
+        .trip-date { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
+        .trip-cost { font-weight: 600; font-size: 16px; color: var(--text-main); }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Benzine</h1>
+    </header>
+
+    <div class="card">
+        <div class="balance-label">Te ontvangen</div>
+        <div class="balance-amount" id="bankDisplay">€ 0,00</div>
+        <button class="btn btn-reset" onclick="resetBank()">Reset (Geld ontvangen)</button>
+    </div>
+
+    <div class="card">
+        <div class="form-group">
+            <label>Bestuurder</label>
+            <select id="driver">
+                <option value="solo">Ik rijd alleen</option>
+                <option value="samen">Samen met de liefste</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Route</label>
+            <input type="text" id="start" value="Francklaan 4, Nijkerk" style="margin-bottom: 10px;">
+            <input type="text" id="destination" placeholder="Bestemming (stad of adres)">
+        </div>
+
+        <a href="#" class="btn btn-secondary" onclick="openMaps()">
+            <span style="margin-right: 6px;">🗺️</span> Open Maps
+        </a>
+
+        <div class="form-group" style="margin-top:10px;">
+            <label>Afstand & Type</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="kmInput" placeholder="Aantal km" inputmode="decimal" style="flex: 1;">
+                <select id="tripType" style="flex: 1;">
+                    <option value="1">Enkele reis</option>
+                    <option value="2">Retour</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="addTrip()">Rit Toevoegen</button>
+    </div>
+
+    <div class="card hidden" id="historyCard">
+        <div class="balance-label" style="margin-bottom: 10px;">Recente ritten</div>
+        <ul id="historyList" class="history-list">
+            </ul>
+    </div>
+
+    <script>
+        // --- CONFIGURATIE ---
+        // 75 euro per tank / 650 km
+        const PRICE_PER_KM = 75 / 650; 
+
+        // --- INIT ---
+        window.onload = function() {
+            renderUI();
+        }
+
+        // --- FUNCTIES ---
+        function openMaps() {
+            const start = document.getElementById('start').value;
+            const dest = document.getElementById('destination').value;
+            
+            if(!dest) {
+                alert("Vul eerst een bestemming in.");
+                return;
+            }
+            // Universele link werkt op iOS direct met de Maps app
+            const url = `http://maps.apple.com/?saddr=${encodeURIComponent(start)}&daddr=${encodeURIComponent(dest)}&dirflg=d`;
+            window.open(url, '_self');
+        }
+
+        function addTrip() {
+            const kmInput = document.getElementById('kmInput').value.replace(',', '.');
+            const km = parseFloat(kmInput);
+            const multiplier = parseInt(document.getElementById('tripType').value);
+            const driver = document.getElementById('driver').value;
+            const destName = document.getElementById('destination').value || "Onbekende rit";
+
+            if (!km || km <= 0) {
+                alert("Vul een geldig aantal kilometers in.");
+                return;
+            }
+
+            // Berekening
+            let cost = km * multiplier * PRICE_PER_KM;
+            let label = destName;
+
+            if (driver === 'samen') {
+                cost = cost / 2;
+                label += " (Samen)";
+            }
+
+            // Opslaan Totaal
+            let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
+            localStorage.setItem('benzinePot', (currentTotal + cost).toFixed(2));
+
+            // Opslaan Historie
+            let history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
+            const newTrip = {
+                desc: label,
+                cost: cost,
+                date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }),
+                ts: Date.now()
+            };
+            history.unshift(newTrip);
+            localStorage.setItem('ritHistorie', JSON.stringify(history));
+
+            // UI Resetten
+            document.getElementById('kmInput').value = '';
+            document.getElementById('destination').value = '';
+            
+            renderUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetBank() {
+            // Gebruik de native dialoog, maar check of gebruiker zeker is
+            if(confirm("Teller resetten naar €0,00?")) {
+                localStorage.setItem('benzinePot', 0);
+                localStorage.setItem('ritHistorie', JSON.stringify([]));
+                renderUI();
+            }
+        }
+
+        function renderUI() {
+            // 1. Totaalbedrag
+            const total = parseFloat(localStorage.getItem('benzinePot')) || 0;
+            document.getElementById('bankDisplay').innerText = formatCurrency(total);
+
+            // 2. Lijstje
+            const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
+            const listContainer = document.getElementById('historyList');
+            const cardContainer = document.getElementById('historyCard');
+
+            listContainer.innerHTML = '';
+
+            if (history.length === 0) {
+                cardContainer.classList.add('hidden');
+            } else {
+                cardContainer.classList.remove('hidden');
+                // Laat max 10 ritten zien om het scherm schoon te houden
+                history.slice(0, 10).forEach(trip => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <div>
+                            <div class="trip-desc">${trip.desc}</div>
+                            <div class="trip-date">${trip.date}</div>
+                        </div>
+                        <div class="trip-cost">+ ${formatCurrency(trip.cost)}</div>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            }
+        }
+
+        function formatCurrency(num) {
+            return num.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' });
+        }
+    </script>
+</body>
+</html>
