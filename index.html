@@ -7,128 +7,187 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f2f2f7;
-            color: #1c1c1e;
+            background-color: #f4f7f6; /* Heel licht grijs-groen */
+            color: #333;
             padding: 20px;
-            max-width: 600px;
+            max-width: 500px; /* Iets smaller voor mooiere mobiele look */
             margin: 0 auto;
         }
-        h2 { text-align: center; color: #007aff; }
+
+        /* De 'stevige' kop */
+        h2 { 
+            text-align: center; 
+            color: #264653; /* Donker petrol/groen */
+            font-weight: 800;
+            text-transform: lowercase;
+            font-size: 2em;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+        }
         
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
             margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
+            margin-bottom: 6px;
+            font-weight: 500;
             font-size: 0.9em;
-            color: #8e8e93;
+            color: #7f8c8d;
+            text-transform: lowercase;
         }
 
         input, select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #d1d1d6;
-            border-radius: 8px;
-            font-size: 16px; /* Voorkomt inzoomen op iPhone */
-            margin-bottom: 15px;
+            border: 2px solid #ecf0f1;
+            background-color: #fafafa;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
             box-sizing: border-box;
+            color: #2c3e50;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2a9d8f;
         }
 
         .btn {
             display: block;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             text-align: center;
-            margin-bottom: 10px;
-            transition: background 0.2s;
+            transition: transform 0.1s, opacity 0.2s;
+            text-decoration: none;
         }
 
-        .btn-maps { background-color: #34c759; color: white; text-decoration: none; }
-        .btn-calc { background-color: #007aff; color: white; }
-        .btn-reset { background-color: #ff3b30; color: white; margin-top: 20px;}
+        .btn:active { transform: scale(0.98); }
 
-        .result-box {
-            text-align: center;
-            padding: 15px;
-            background-color: #f2f2f7;
-            border-radius: 8px;
+        /* De frisse actiekleur (Zeegroen) */
+        .btn-action { 
+            background-color: #2a9d8f; 
+            color: white; 
+        }
+
+        /* Maps knop - compacter */
+        .btn-maps {
+            background-color: white;
+            color: #2a9d8f;
+            border: 2px solid #2a9d8f;
+            display: inline-block; /* Niet meer volle breedte */
+            width: auto;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Reset knop - rustig oranje */
+        .btn-reset { 
+            background-color: #e9c46a; 
+            color: #264653; 
             margin-top: 10px;
         }
 
         .total-display {
-            font-size: 2.5em;
-            font-weight: bold;
+            font-size: 2.8em;
+            font-weight: 800;
             text-align: center;
-            color: #1c1c1e;
+            color: #264653;
             margin: 10px 0;
+            font-feature-settings: "tnum";
+            letter-spacing: -1px;
+        }
+
+        /* Stijl voor het lijstje */
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-top: 1px solid #ecf0f1;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.9em;
+        }
+        .history-meta { color: #95a5a6; font-size: 0.85em; }
+        .history-amount { font-weight: bold; color: #2a9d8f; }
+
+        h3 { 
+            color: #264653; 
+            margin-top: 0; 
+            text-transform: lowercase;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <h2>🚗 Kilometerteller</h2>
+    <h2>kilometerteller</h2>
 
     <div class="card">
-        <label>Te ontvangen bedrag:</label>
+        <label>te ontvangen</label>
         <div class="total-display" id="bankDisplay">€ 0,00</div>
-        <button class="btn btn-reset" onclick="resetBank()">💰 Geld ontvangen (Reset)</button>
+        <button class="btn btn-reset" onclick="resetBank()">geld overgemaakt (reset)</button>
     </div>
 
     <div class="card">
-        <h3>Nieuwe Rit</h3>
+        <h3>nieuwe rit</h3>
         
-        <label>Wie rijdt er?</label>
+        <label>wie rijdt er?</label>
         <select id="driver">
-            <option value="solo">Ik rijd alleen</option>
-            <option value="samen">Samen met vrouw</option>
+            <option value="solo">ik rijd alleen</option>
+            <option value="samen">samen met de liefste</option>
         </select>
 
-        <label>Vertrekadres</label>
+        <label>vertrekadres</label>
         <input type="text" id="start" value="Francklaan 4, Nijkerk">
 
-        <label>Bestemming</label>
-        <input type="text" id="destination" placeholder="Bijv. Amsterdam">
+        <label>bestemming</label>
+        <input type="text" id="destination" placeholder="bijv. amsterdam">
 
-        <a href="#" id="mapsLink" target="_blank" class="btn btn-maps" onclick="updateMapsLink()">📍 1. Bekijk Route in Maps</a>
+        <a href="#" id="mapsLink" target="_blank" class="btn btn-maps" onclick="updateMapsLink()">📍 route in maps</a>
+        <br>
 
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <label>aantal kilometers (enkele reis)</label>
+        <input type="number" id="kmInput" placeholder="0" inputmode="decimal">
 
-        <label>Aantal Kilometers (enkele reis)</label>
-        <input type="number" id="kmInput" placeholder="0">
-
-        <label>Type Reis</label>
+        <label>type reis</label>
         <select id="tripType">
-            <option value="1">Enkele reis</option>
-            <option value="2">Retour (heen & terug)</option>
+            <option value="1">enkele reis</option>
+            <option value="2">retour (heen & terug)</option>
         </select>
 
-        <button class="btn btn-calc" onclick="calculateAndAdd()">➕ 2. Bereken & Toevoegen</button>
-        
-        <div id="lastTripInfo" class="result-box" style="display:none;">
-            Laatste rit toegevoegd: <b id="lastTripCost">€0,00</b>
-        </div>
+        <button class="btn btn-action" onclick="calculateAndAdd()">bereken & toevoegen</button>
+    </div>
+
+    <div class="card" id="historyCard" style="display:none;">
+        <h3>laatste ritten</h3>
+        <ul id="historyList" class="history-list">
+            </ul>
     </div>
 
     <script>
         // CONFIGURATIE
-        // 70 euro / 650 km = prijs per km
         const PRICE_PER_KM = 70 / 650; 
 
-        // Bij het laden van de pagina, haal de oude stand op
         window.onload = function() {
-            updateBankDisplay();
+            updateUI();
         }
 
         function updateMapsLink() {
@@ -136,61 +195,96 @@
             const dest = document.getElementById('destination').value;
             
             if(!dest) {
-                alert("Vul eerst een bestemming in!");
+                alert("vul eerst een bestemming in");
                 return false;
             }
-
-            // Maak een Google Maps link
             const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(dest)}`;
-            
-            // Open de link
             window.open(url, '_blank');
         }
 
         function calculateAndAdd() {
             const km = parseFloat(document.getElementById('kmInput').value);
             const multiplier = parseInt(document.getElementById('tripType').value);
+            const driver = document.getElementById('driver').value;
+            const destName = document.getElementById('destination').value || "onbekend";
             
             if (!km || km <= 0) {
-                alert("Vul een geldig aantal kilometers in.");
+                alert("vul een geldig aantal kilometers in");
                 return;
             }
 
-            // Berekening: km * retour_factor * prijs_per_km
-            const tripCost = km * multiplier * PRICE_PER_KM;
+            // Basisberekening
+            let tripCost = km * multiplier * PRICE_PER_KM;
+            let description = destName;
 
-            // Haal huidig totaal op uit geheugen
+            // Halveren als we samen rijden
+            if (driver === 'samen') {
+                tripCost = tripCost / 2;
+                description += " (samen)";
+            }
+
+            // 1. Update Totaal
             let currentTotal = parseFloat(localStorage.getItem('benzinePot')) || 0;
-            
-            // Tel op
             let newTotal = currentTotal + tripCost;
-            
-            // Sla op in geheugen
             localStorage.setItem('benzinePot', newTotal.toFixed(2));
 
-            // Update het scherm
-            updateBankDisplay();
+            // 2. Update Historie Lijstje
+            let history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
             
-            // Toon wat we net hebben toegevoegd
-            document.getElementById('lastTripInfo').style.display = 'block';
-            document.getElementById('lastTripCost').innerText = formatEuro(tripCost);
+            // Voeg nieuwe rit toe vooraan de lijst
+            const newTrip = {
+                desc: description,
+                cost: tripCost,
+                date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' })
+            };
+            history.unshift(newTrip); // Nieuwste bovenaan
+            localStorage.setItem('ritHistorie', JSON.stringify(history));
 
-            // Velden leegmaken voor volgende keer (behalve startadres)
+            // UI verversen
+            updateUI();
+            
+            // Velden opschonen
             document.getElementById('kmInput').value = '';
             document.getElementById('destination').value = '';
         }
 
         function resetBank() {
-            if(confirm("Weet je zeker dat het geld is overgemaakt? De teller gaat terug naar €0.")) {
+            if(confirm("weet je zeker dat het geld is overgemaakt? de teller en de geschiedenis worden gewist.")) {
                 localStorage.setItem('benzinePot', 0);
-                updateBankDisplay();
-                document.getElementById('lastTripInfo').style.display = 'none';
+                localStorage.setItem('ritHistorie', JSON.stringify([])); // Wis ook historie
+                updateUI();
             }
         }
 
-        function updateBankDisplay() {
+        function updateUI() {
+            // Update bedrag
             const amount = parseFloat(localStorage.getItem('benzinePot')) || 0;
             document.getElementById('bankDisplay').innerText = formatEuro(amount);
+
+            // Update lijstje
+            const history = JSON.parse(localStorage.getItem('ritHistorie')) || [];
+            const listEl = document.getElementById('historyList');
+            const listCard = document.getElementById('historyCard');
+
+            listEl.innerHTML = ''; // Maak leeg
+
+            if (history.length > 0) {
+                listCard.style.display = 'block';
+                history.forEach(trip => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <div>
+                            <div>${trip.desc}</div>
+                            <div class="history-meta">${trip.date}</div>
+                        </div>
+                        <div class="history-amount">+ ${formatEuro(trip.cost)}</div>
+                    `;
+                    listEl.appendChild(li);
+                });
+            } else {
+                listCard.style.display = 'none';
+            }
         }
 
         function formatEuro(amount) {
